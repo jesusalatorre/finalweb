@@ -1,6 +1,13 @@
 const mongoose = require('mongoose')
-const misc = require('../misc.js')
-const connectionURL = 'mongodb+srv://' + misc.dbData + '@cluster0-n1oxt.mongodb.net/finalWeb?retryWrites=true'
+if (process.env.NODE_ENV == 'production') {
+	var connectionURL = process.enc.connectionURL
+} 
+else 
+{
+	const misc = require('../misc.js')
+	var connectionURL = 'mongodb+srv://' + 
+}
+
 
 mongoose.set('useFindAndModify', false);
 

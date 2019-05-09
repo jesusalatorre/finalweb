@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 
-const petSchema = mongoose.Schema({
+const petSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		required: true
@@ -12,6 +12,7 @@ const petSchema = mongoose.Schema({
 	},
 	breed: {
 		type: String,
+		required: true
 	},
 	specialCare: {
 		type: Boolean,
@@ -24,7 +25,18 @@ const petSchema = mongoose.Schema({
 	sterilization: {
 		type: Boolean,
 		required: true
+	},
+	adopted: {
+		type: Boolean,
+		required: true
 	}
+/*
+Calara cómo jala bien esto
+	ownedBy: {
+		type: mongoose.Schema.type.
+
+	}
+*/
 })
 
 const Pet = mongoose.model('Pet', petSchema)
