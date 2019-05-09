@@ -4,12 +4,15 @@
   "description": "A node.js application for helping doggos find homes.",
   "main": "index.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.16.4",
-    "mongoose": "^5.5.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.7",
     "validator": "^10.11.0"
   },
   "devDependencies": {},
   "scripts": {
+    "start":"node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

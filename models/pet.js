@@ -30,13 +30,6 @@ const petSchema = new mongoose.Schema({
 		type: Boolean,
 		required: true
 	}
-/*
-Calara cómo jala bien esto
-	ownedBy: {
-		type: mongoose.Schema.type.
-
-	}
-*/
 })
 
 const Pet = mongoose.model('Pet', petSchema)
