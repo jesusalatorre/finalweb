@@ -29,7 +29,7 @@ const login = function(req, res) {
 			return res.send({user, token})
 		}).catch(function(error){
 			return res.status(401).send({ error: error })
-		}
+		})
 	}).catch(function(error) {
 		return res.status(401).send({error: error})
 	})

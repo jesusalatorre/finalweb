@@ -1,11 +1,13 @@
 const mongoose = require('mongoose')
-if (process.env.NODE_ENV == 'production') {
-	var connectionURL = process.enc.connectionURL
+if (!process.env.NODE_ENV) {
+	const misc = require('../misc.js')
+	var connectionURL = misc.dbData
 } 
 else 
 {
-	const misc = require('../misc.js')
-	var connectionURL = 'mongodb+srv://' + 
+	if(process.env.NODE_ENV == 'production') {
+		var connectionURL = process.env.connectionURL
+	}
 }
 
 

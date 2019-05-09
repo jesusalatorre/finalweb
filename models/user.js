@@ -3,15 +3,6 @@ const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-if(process.env.NODE_ENV === 'production') {
-  var DBDATA = process.env.DBDATA
-}
-else
-{
-  const config = require('../misc.js')
-  var DBDATA = config.dbdata 
-}
-
 const userSchema = mongoose.Schema( {
 	name: {
 		type: String,

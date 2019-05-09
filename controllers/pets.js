@@ -38,7 +38,8 @@ const createPet = function(req, res) {
 }
 
 const updatePet = function(req, res) {
-	const _id = req.params.idconst updates = Object.keys(req.body)
+	const _id = req.params.idconst 
+	const updates = Object.keys(req.body)
 	const allowedUpdates = ['name','animalType','breed', 'age', 'adopted']
 	const isValidUpdate = updates.every((update) => allowedUpdates.includes(update))
 
