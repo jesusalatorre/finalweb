@@ -9,8 +9,8 @@ const getUsers = function(req, res) {
 }
 
 const getUser = function(req, res) {
-	User.findById( req.user_id ).populate('pets').exec(function(error, user) {
-		return res.send(user)
+	User.findById( req.user._id ).populate('petsForAdoption').popoulat('petsAdopted').exec(function(error, user) {
+  		return res.send(user)
 	})
 }
 
@@ -24,15 +24,15 @@ const createUser = function(req, res) {
 }
 
 const login = function(req, res) {
-	User.findByCredentials(req.body.email, req.body.password).then(function(user){
-		user.generateToken().then(function(token) {
-			return res.send({user, token})
-		}).catch(function(error){
-			return res.status(401).send({ error: error })
-		})
-	}).catch(function(error) {
-		return res.status(401).send({error: error})
-	})
+  User.findByCredentials(req.body.email, req.body.password).then(function(user){
+    	user.generateToken().then(function(token){
+      		return res.send({user, token})
+    	}).catch(function(error){
+      		return res.status(401).send({ error: error })
+    	})
+  	}).catch(function(error) {
+    	return res.status(401).send({ error: error })
+  	})
 }
 
 const logout = function(req, res) {
@@ -50,7 +50,7 @@ const updateUser = function(req, res) {
 	const _id = req.user._id
 	const updates = Object.keys(req.body)
 	const allowedUpdates = ['name', 'password', 'email', 'location']
-	const isValidUpdate = updates.every((update) => allowedUpdates.include(update))
+	const isValidUpdate = updates.every((update) => allowedUpdates.includes(update))
 
 	if (!isValidUpdate) {
 		return res.status(400).send({

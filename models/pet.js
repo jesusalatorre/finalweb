@@ -29,7 +29,16 @@ const petSchema = new mongoose.Schema({
 	adopted: {
 		type: Boolean,
 		required: true
-	}
+	},
+	createdBy: {
+	    type: mongoose.Schema.Types.ObjectId,
+	    required: true,
+	    ref: 'User',
+ 	},
+  	adoptedBy: {
+  		type: mongoose.Schema.Types.ObjectId,
+	    ref: 'User',
+  	}
 })
 
 const Pet = mongoose.model('Pet', petSchema)

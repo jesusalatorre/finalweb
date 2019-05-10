@@ -1,7 +1,7 @@
 const Pet = require('../models/pet.js')
 
 const getPets = function(req, res) {
-	Pet.find({ createdBy: req.user._id }).then(function(pets) {
+	Pet.find({}).then(function(pets) {
 		res.send(pets)
 	}).catch(function(error) {
 		res.send(500).send(error)
@@ -10,7 +10,8 @@ const getPets = function(req, res) {
 
 const getPet = function(req, res) {
 	const _id = req.params._id
-	Pet.findOne({_id, createdBy: req.user._id}).then(function(pet) {
+	console.log("prueba" + _id)
+	Pet.findOne({_id}).then(function(pet) {
 		if(!pet){
 			return res.status(404).send({error: `Pet with id ${_id} not found.`})
 		}
@@ -28,7 +29,8 @@ const createPet = function(req, res) {
 		specialCare: req.body.specialCare,
 		age: req.body.age,
 		sterilization: req.body.sterilization,
-		adopted: false
+		adopted: false,
+		createdBy: req.user._id
 	})
 	pet.save().then(function() {
 		return res.send(pet)
@@ -38,9 +40,9 @@ const createPet = function(req, res) {
 }
 
 const updatePet = function(req, res) {
-	const _id = req.params.idconst 
+	const _id = req.params.idconst
 	const updates = Object.keys(req.body)
-	const allowedUpdates = ['name','animalType','breed', 'age', 'adopted']
+	const allowedUpdates = ['name','animalType','breed', 'age', 'adopted', 'adoptedBy']
 	const isValidUpdate = updates.every((update) => allowedUpdates.includes(update))
 
 	if( !isValidUpdate ) {
@@ -48,7 +50,7 @@ const updatePet = function(req, res) {
 			error: 'Invalid update, only allowed to update: ' +  allowedUpdates
 		})
 	}
-	Pet.findOneAndUpdate({_id, createdBy: req.user._id}, req.body).then(function(pet) {
+	Pet.findOneAndUpdate({_id}, req.body).then(function(pet) {
 		if(!pet) {
 			return res.status(404).send({ error: `Pet with id ${_id} not found.` })
 		}
@@ -59,7 +61,7 @@ const updatePet = function(req, res) {
 }
 
 const deletePet = function(req, res) {
-	const _id = req.params.id
+	const _id = req.params.idconst
 	Pet.findOneAndDelete({_id, createdBy: req.user._id}).then(function(pet){
 		if(!pet) {
 			return res.status(404).send({ error: `Pet with id ${_id} not found.`})
