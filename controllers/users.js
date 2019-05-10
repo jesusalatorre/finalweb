@@ -1,4 +1,5 @@
 const User = require('../models/user.js')
+const bcrypt = require('bcryptjs')
 
 const getUsers = function(req, res) {
 	USer.find({}).then(function(users) {
@@ -36,7 +37,7 @@ const login = function(req, res) {
 }
 
 const logout = function(req, res) {
-	req.user.tokens = req.users.tokens.filter(function(token) {
+	req.user.tokens = req.user.tokens.filter(function(token) {
 		return token.token !== req.token
 	})
 	req.user.save().then(function() {
@@ -57,10 +58,24 @@ const updateUser = function(req, res) {
 			error: 'Invalid update, only parameters allowed to update: ' + allowedUpdates
 		})
 	}
-	User.findByIdAndUpdate(_id, req.body).then(function(user) {
+	/*
+	else
+	{
+		console.log(req.body)
+		if(req.body.password!=null){
+					bcrypt.hash(req.body.password, 8).then(function(hash) {
+					req.body.password = hash
+					console.log("esto es el hash: " + hash)
+				})
+			}
+		console.log("encrypted: " + req.body)
+	}
+	*/
+	User.findByIdAndUpdate(_id, req.body).then( function(user) {
 		if(!user) {
 			return res.status(404).send()
 		}
+		user.save()
 		return res.send(user)
 	}).catch(function(error) {
 		res.status(500).send(error)

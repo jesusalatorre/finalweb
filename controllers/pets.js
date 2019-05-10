@@ -49,7 +49,7 @@ const createPet = function(req, res) {
 		adopted: false,
 		createdBy: req.user._id,
 		data: fs.readFileSync(imgPath), //Hay que cambiar esto para que agarre el path especificado por el usuario, o añadirle fotos nosotros o algo así
-		contentType: 'image/jpg'
+		contentType: 'image/png'
 	})
 	pet.save().then(function() {
 		return res.send(pet)
@@ -86,7 +86,12 @@ const adoptPet = function(req, res) {
 		if(!pet) {
 			return res.status(404).send({error: `Pet with id ${_id} not found.`})
 		}
-		return res.send(pet)
+		if(pet.adopted == false){
+			return res.send(pet)
+		}
+		else {
+			return res.status(500).send({error: `Pet with id ${_id} already adopted. Keep looking por another pet!!!`})
+		}
 	}).catch(function(error) {
 		res.status(505).send({error:error})
 	})
