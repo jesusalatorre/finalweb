@@ -10,13 +10,26 @@ const getPets = function(req, res) {
 }
 
 const getPet = function(req, res) {
-	const _id = req.params._id
+	const _id = req.params.id
 	console.log("prueba" + _id)
 	Pet.findOne({_id}).then(function(pet) {
 		if(!pet){
 			return res.status(404).send({error: `Pet with id ${_id} not found.`})
 		}
 		return res.send(pet)
+	}).catch(function(error) {
+		return res.status(500).send({ error: error })
+	})
+}
+
+const getPetPic = function(req, res) {
+	const _id = req.params.id
+	console.log("Busco la foto" + _id)
+	Pet.findOne({_id}).then(function(pet) {
+		if(!pet){
+			return res.status(404).send({error: `Pet with id ${_id} not found.`})
+		}
+		return res.contentType(pet.contentType).send(pet.data)
 	}).catch(function(error) {
 		return res.status(500).send({ error: error })
 	})
@@ -48,7 +61,7 @@ const createPet = function(req, res) {
 const updatePet = function(req, res) {
 	const _id = req.params.idconst
 	const updates = Object.keys(req.body)
-	const allowedUpdates = ['name','animalType','breed', 'age', 'adopted', 'adoptedBy']
+	const allowedUpdates = ['name','animalType','breed', 'age', 'adopted']
 	const isValidUpdate = updates.every((update) => allowedUpdates.includes(update))
 
 	if( !isValidUpdate ) {
@@ -63,6 +76,19 @@ const updatePet = function(req, res) {
 		return res.send(pet)
 	}).catch(function(error) {
 		res.status(500).send({ error: error })
+	})
+}
+
+const adoptPet = function(req, res) {
+	const _id = req.params.idconst
+	const adoptedBy = req.user._id
+	Pet.findOneAndUpdate({_id},{adoptedBy}).then(function(pet) {
+		if(!pet) {
+			return res.status(404).send({error: `Pet with id ${_id} not found.`})
+		}
+		return res.send(todo)
+	}).catch(function(error) {
+		res.status(505).send({error:error})
 	})
 }
 
@@ -81,7 +107,9 @@ const deletePet = function(req, res) {
 module.exports = {
 	getPets : getPets,
 	getPet : getPet,
+	getPetPic : getPetPic,
 	createPet : createPet,
+	adoptPet : adoptPet,
 	updatePet : updatePet,
 	deletePet : deletePet
 }
