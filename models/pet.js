@@ -20,7 +20,12 @@ const petSchema = new mongoose.Schema({
 	},
 	age: {
 		type: Number,
-		required: true
+		required: true,
+		validate(value) {
+			if (value > 0) {
+				throw new Error('The age of the pet should be greater than 0.')
+			}
+		}
 	},
 	sterilization: {
 		type: Boolean,
