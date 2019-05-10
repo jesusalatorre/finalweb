@@ -3,7 +3,7 @@ const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-const userSchema = mongoose.Schema( {
+const userSchema = new mongoose.Schema( {
 	name: {
 		type: String,
 		required: true
@@ -53,10 +53,16 @@ const userSchema = mongoose.Schema( {
 })
 
 
-userSchema.virtual('pets', {
+userSchema.virtual('petsForAdoption', {
 	ref: 'Pet',
 	localField: '_id',
 	foreignField: 'createdBy'
+})
+
+userSchema.virtual('petsAdopted', {
+	ret: 'Pet',
+	localField: '_id',
+	foreignField: 'adoptedBy'
 })
 
 userSchema.methods.toJSON = function() {
@@ -69,7 +75,7 @@ userSchema.methods.toJSON = function() {
 	return userObject
 }
 
-userSchema.static.findByCredentials = function(email, password) {
+userSchema.statics.findByCredentials = function(email, password) {
 	return new Promise( function(resolve, reject) {
 		User.findOne({ email }).then(function(user) {
 			if( !user ) {
@@ -98,14 +104,14 @@ userSchema.methods.generateToken = function() {
 	  const config = require('../misc.js')
 	  var SECRET = config.secret 
 	}
-	const token = jwt.sign({_id: user._id.toString()}, SECRET, {expiresIn: '2 days'})
+	const token = jwt.sign({ _id: user._id.toString() }, SECRET, { expiresIn: '7 days'})
 	user.tokens = user.tokens.concat({ token })
-	return new Promise(function(resolve, reject) {
-		user.save().then(function(user) {
-			return resolve(token)
-		}).catch(function(error) {
-			return reject(error)
-		})
+	return new Promise(function( resolve, reject) {
+		user.save().then(function(user){
+	    	return resolve(token)
+	    }).catch(function(error) {
+	    	return reject(error)
+	    })
 	})
 }
 

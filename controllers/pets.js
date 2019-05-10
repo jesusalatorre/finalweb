@@ -1,7 +1,8 @@
+const fs = require('fs')
 const Pet = require('../models/pet.js')
 
 const getPets = function(req, res) {
-	Pet.find({ createdBy: req.user._id }).then(function(pets) {
+	Pet.find({}).then(function(pets) {
 		res.send(pets)
 	}).catch(function(error) {
 		res.send(500).send(error)
@@ -9,18 +10,35 @@ const getPets = function(req, res) {
 }
 
 const getPet = function(req, res) {
-	const _id = req.params._id
-	Pet.findOne({_id, createdBy: req.user._id}).then(function(pet) {
+	const _id = req.params.id
+	console.log("prueba" + _id)
+	Pet.findOne({_id}).then(function(pet) {
 		if(!pet){
 			return res.status(404).send({error: `Pet with id ${_id} not found.`})
 		}
-		return res.sned(pet)
+		return res.send(pet)
+	}).catch(function(error) {
+		return res.status(500).send({ error: error })
+	})
+}
+
+const getPetPic = function(req, res) {
+	const _id = req.params.id
+	console.log("Busco la foto" + _id)
+	Pet.findOne({_id}).then(function(pet) {
+		if(!pet){
+			return res.status(404).send({error: `Pet with id ${_id} not found.`})
+		}
+		return res.contentType(pet.contentType).send(pet.data)
 	}).catch(function(error) {
 		return res.status(500).send({ error: error })
 	})
 }
 
 const createPet = function(req, res) {
+	//const imgPath = req.body.image_path
+	const imgPath = "./petpics/dog1.jpg"
+	console.log(__dirname)
 	const pet = new Pet({
 		name: req.body.name,
 		animalType: req.body.animalType,
@@ -28,7 +46,10 @@ const createPet = function(req, res) {
 		specialCare: req.body.specialCare,
 		age: req.body.age,
 		sterilization: req.body.sterilization,
-		adopted: false
+		adopted: false,
+		createdBy: req.user._id,
+		data: fs.readFileSync(imgPath),
+		contentType: 'image/jpg'
 	})
 	pet.save().then(function() {
 		return res.send(pet)
@@ -38,7 +59,7 @@ const createPet = function(req, res) {
 }
 
 const updatePet = function(req, res) {
-	const _id = req.params.idconst 
+	const _id = req.params.idconst
 	const updates = Object.keys(req.body)
 	const allowedUpdates = ['name','animalType','breed', 'age', 'adopted']
 	const isValidUpdate = updates.every((update) => allowedUpdates.includes(update))
@@ -48,7 +69,7 @@ const updatePet = function(req, res) {
 			error: 'Invalid update, only allowed to update: ' +  allowedUpdates
 		})
 	}
-	Pet.findOneAndUpdate({_id, createdBy: req.user._id}, req.body).then(function(pet) {
+	Pet.findOneAndUpdate({_id}, req.body).then(function(pet) {
 		if(!pet) {
 			return res.status(404).send({ error: `Pet with id ${_id} not found.` })
 		}
@@ -58,8 +79,21 @@ const updatePet = function(req, res) {
 	})
 }
 
+const adoptPet = function(req, res) {
+	const _id = req.params.idconst
+	const adoptedBy = req.user._id
+	Pet.findOneAndUpdate({_id},{adoptedBy}).then(function(pet) {
+		if(!pet) {
+			return res.status(404).send({error: `Pet with id ${_id} not found.`})
+		}
+		return res.send(todo)
+	}).catch(function(error) {
+		res.status(505).send({error:error})
+	})
+}
+
 const deletePet = function(req, res) {
-	const _id = req.params.id
+	const _id = req.params.idconst
 	Pet.findOneAndDelete({_id, createdBy: req.user._id}).then(function(pet){
 		if(!pet) {
 			return res.status(404).send({ error: `Pet with id ${_id} not found.`})
@@ -73,7 +107,9 @@ const deletePet = function(req, res) {
 module.exports = {
 	getPets : getPets,
 	getPet : getPet,
+	getPetPic : getPetPic,
 	createPet : createPet,
+	adoptPet : adoptPet,
 	updatePet : updatePet,
 	deletePet : deletePet
 }
