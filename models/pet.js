@@ -30,6 +30,12 @@ const petSchema = new mongoose.Schema({
 		type: Boolean,
 		required: true
 	},
+	data: {
+		type: Buffer
+	},
+	contentType: {
+		type: String
+	},
 	createdBy: {
 	    type: mongoose.Schema.Types.ObjectId,
 	    required: true,

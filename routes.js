@@ -18,7 +18,7 @@ router.patch('/users', auth, users.updateUser)	//Actualiza la info del current u
 router.delete('/users', auth, users.deleteUser)	//Elimina el documento del current user
 
 router.get('/pets/:id', auth, pets.getPet)		//Regresa la info de una pet en específico
-router.get('/pets', auth, pets.getPets)			//Regresa los pets creados por el user
+router.get('/pets', auth, pets.getPets)			//Regresa todas las pets disponibles
 router.post('/pets', auth, pets.createPet)		//Crea un nuevo documento de pet
 router.patch('/pets/:id', auth, pets.updatePet)	//Modifica los datos del documento pet que matche el id
 router.delete('/pets/:id', auth, pets.deletePet)//Elimina el documento del pet especificado

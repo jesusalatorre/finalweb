@@ -1,3 +1,4 @@
+const fs = require('fs')
 const Pet = require('../models/pet.js')
 
 const getPets = function(req, res) {
@@ -15,13 +16,16 @@ const getPet = function(req, res) {
 		if(!pet){
 			return res.status(404).send({error: `Pet with id ${_id} not found.`})
 		}
-		return res.sned(pet)
+		return res.send(pet)
 	}).catch(function(error) {
 		return res.status(500).send({ error: error })
 	})
 }
 
 const createPet = function(req, res) {
+	//const imgPath = req.body.image_path
+	const imgPath = "./petpics/dog1.jpg"
+	console.log(__dirname)
 	const pet = new Pet({
 		name: req.body.name,
 		animalType: req.body.animalType,
@@ -30,7 +34,9 @@ const createPet = function(req, res) {
 		age: req.body.age,
 		sterilization: req.body.sterilization,
 		adopted: false,
-		createdBy: req.user._id
+		createdBy: req.user._id,
+		data: fs.readFileSync(imgPath),
+		contentType: 'image/jpg'
 	})
 	pet.save().then(function() {
 		return res.send(pet)
