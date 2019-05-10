@@ -60,7 +60,7 @@ userSchema.virtual('petsForAdoption', {
 })
 
 userSchema.virtual('petsAdopted', {
-	ret: 'Pet',
+	ref: 'Pet',
 	localField: '_id',
 	foreignField: 'adoptedBy'
 })

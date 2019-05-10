@@ -9,7 +9,7 @@ const getUsers = function(req, res) {
 }
 
 const getUser = function(req, res) {
-	User.findById( req.user._id ).populate('petsForAdoption').popoulat('petsAdopted').exec(function(error, user) {
+	User.findById( req.user._id ).populate('petsAdopted').populate('petsForAdoption').exec(function(error, user) {
   		return res.send(user)
 	})
 }
