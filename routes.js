@@ -21,7 +21,7 @@ router.get('/pets/:id/pic', pets.getPetPic)			//Regresa la foto que le fue asign
 router.get('/pets/:id', auth, pets.getPet)		//Regresa la info de una pet en específico
 router.get('/pets', auth, pets.getPets)			//Regresa todas las pets disponibles
 router.post('/pets', auth, pets.createPet)		//Crea un nuevo documento de pet
-router.patch('pets/:id/adopt', auth, pets.updatePet)//Asigna al usuario la mascota que quiera adoptar
+router.post('/pets/:id/adopt', auth, pets.adoptPet)//Asigna al usuario la mascota que quiera adoptar
 router.patch('/pets/:id', auth, pets.updatePet)	//Modifica los datos del documento pet que matche el id
 router.delete('/pets/:id', auth, pets.deletePet)//Elimina el documento del pet especificado
 

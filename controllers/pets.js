@@ -48,7 +48,7 @@ const createPet = function(req, res) {
 		sterilization: req.body.sterilization,
 		adopted: false,
 		createdBy: req.user._id,
-		data: fs.readFileSync(imgPath),
+		data: fs.readFileSync(imgPath), //Hay que cambiar esto para que agarre el path especificado por el usuario, o añadirle fotos nosotros o algo así
 		contentType: 'image/jpg'
 	})
 	pet.save().then(function() {
@@ -59,7 +59,7 @@ const createPet = function(req, res) {
 }
 
 const updatePet = function(req, res) {
-	const _id = req.params.idconst
+	const _id = req.params.id
 	const updates = Object.keys(req.body)
 	const allowedUpdates = ['name','animalType','breed', 'age', 'adopted']
 	const isValidUpdate = updates.every((update) => allowedUpdates.includes(update))
@@ -80,20 +80,20 @@ const updatePet = function(req, res) {
 }
 
 const adoptPet = function(req, res) {
-	const _id = req.params.idconst
+	const _id = req.params.id
 	const adoptedBy = req.user._id
-	Pet.findOneAndUpdate({_id},{adoptedBy}).then(function(pet) {
+	Pet.findOneAndUpdate({_id},{adoptedBy, adopted: true}).then(function(pet) {
 		if(!pet) {
 			return res.status(404).send({error: `Pet with id ${_id} not found.`})
 		}
-		return res.send(todo)
+		return res.send(pet)
 	}).catch(function(error) {
 		res.status(505).send({error:error})
 	})
 }
 
 const deletePet = function(req, res) {
-	const _id = req.params.idconst
+	const _id = req.params.id
 	Pet.findOneAndDelete({_id, createdBy: req.user._id}).then(function(pet){
 		if(!pet) {
 			return res.status(404).send({ error: `Pet with id ${_id} not found.`})
