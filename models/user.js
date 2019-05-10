@@ -115,18 +115,45 @@ userSchema.methods.generateToken = function() {
 	})
 }
 
-userSchema.pre('save', function(next){
-	const user = this
-	if( user.isModified('password')) {
-		bcrypt.hash(user.password, 8).then(function(hash) {
-			user.password = hash
-			next()
-		}).catch(function(error) {
-			return next(error)
-		})
-	} else {
-		next()
-	}
+userSchema.pre('save', function(next) {
+  const user = this
+  console.log("ando en el método pre de save")
+  bcrypt.hash(user.password, 8).then(function(hash){
+	  user.password = hash
+	  next()
+	}).catch(function(error){
+    	return next(error)
+    })
+  /*  
+  if( user.isModified('password') ) {
+  	console.log("Si se modificó la password")
+    bcrypt.hash(user.password, 8).then(function(hash){
+      user.password = hash
+      next()
+    }).catch(function(error){
+      return next(error)
+    })
+  } else {
+    next()  
+  }
+  */
+})
+
+userSchema.pre('update', function(next) {
+	const user = this.update({},{
+		
+	})
+  if( user.isModified('password') ) {
+  	console.log("Si se modificó la password")
+    bcrypt.hash(user.password, 8).then(function(hash){
+      user.password = hash
+      next()
+    }).catch(function(error){
+      return next(error)
+    })
+  } else {
+    next()  
+  }
 })
 
 const User = mongoose.model('User', userSchema)
