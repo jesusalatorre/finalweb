@@ -19,13 +19,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jesusalatorre/finalweb.git"
+    "url": "git+https://github.com/jesusalatorre/pawsitivity-back.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jesusalatorre/finalweb/issues"
+    "url": "https://github.com/jesusalatorre/positivity-back/issues"
   },
-  "homepage": "https://github.com/jesusalatorre/finalweb#readme"
+  "homepage": "https://github.com/jesusalatorre/pawsitivity-back#readme"
 }
