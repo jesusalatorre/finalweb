@@ -49,7 +49,9 @@ const createPet = function(req, res) {
 		adopted: false,
 		createdBy: req.user._id,
 		data: fs.readFileSync(imgPath), //Hay que cambiar esto para que agarre el path especificado por el usuario, o añadirle fotos nosotros o algo así
-		contentType: 'image/png'
+		contentType: 'image/png',
+		ownerEmail: req.user.email,
+		location: req.user.location
 	})
 	pet.save().then(function() {
 		return res.send(pet)
