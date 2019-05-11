@@ -46,6 +46,14 @@ const petSchema = new mongoose.Schema({
 	contentType: {
 		type: String
 	},
+	ownerEmail: {
+		type: String,
+		required: true
+	},
+	location: {
+		type: String,
+		required: true
+	},
 	createdBy: {
 	    type: mongoose.Schema.Types.ObjectId,
 	    required: true,
