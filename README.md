@@ -1,2 +1,2 @@
-# Pawsitivity
-A node.js application for helping doggos find homes.
+# Pawsitivity-Back
+A node.js-mongo backend for helping doggos find homes.
