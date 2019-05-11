@@ -9,6 +9,11 @@ const petSchema = new mongoose.Schema({
 	animalType: {
 		type: String,
 		required: true
+		validate(value) {
+			if (value == '-1') {
+				throw new Error('Choose an animal type.')
+			}
+		}
 	},
 	breed: {
 		type: String,
@@ -22,7 +27,7 @@ const petSchema = new mongoose.Schema({
 		type: Number,
 		required: true,
 		validate(value) {
-			if (value > 0) {
+			if (value < 0) {
 				throw new Error('The age of the pet should be greater than 0.')
 			}
 		}
