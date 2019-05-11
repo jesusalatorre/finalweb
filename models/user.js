@@ -81,11 +81,16 @@ userSchema.statics.findByCredentials = function(email, password) {
 			if( !user ) {
 				return reject('User does not exist')
 			}
+			bcrypt.hash(password, 8).then(function(hash){
+	  		passwordHash = hash
+	  		console.log(passwordHash)
+	  	})
+			console.log(user.password)
 			bcrypt.compare(password, user.password).then(function (match) {
 				if (match) {
 					return resolve(user)
 				} else {
-					return reject('User or password does not match!')
+					return reject('Password does not match!')
 				}
 			}).catch( function(error) {
 				return reject('User or password does not match!')
@@ -118,31 +123,7 @@ userSchema.methods.generateToken = function() {
 userSchema.pre('save', function(next) {
   const user = this
   console.log("ando en el método pre de save")
-  bcrypt.hash(user.password, 8).then(function(hash){
-	  user.password = hash
-	  next()
-	}).catch(function(error){
-    	return next(error)
-    })
-  /*  
-  if( user.isModified('password') ) {
-  	console.log("Si se modificó la password")
-    bcrypt.hash(user.password, 8).then(function(hash){
-      user.password = hash
-      next()
-    }).catch(function(error){
-      return next(error)
-    })
-  } else {
-    next()  
-  }
-  */
-})
-
-userSchema.pre('update', function(next) {
-	const user = this.update({},{
-		
-	})
+  
   if( user.isModified('password') ) {
   	console.log("Si se modificó la password")
     bcrypt.hash(user.password, 8).then(function(hash){

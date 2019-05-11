@@ -25,7 +25,8 @@ const createUser = function(req, res) {
 }
 
 const login = function(req, res) {
-  User.findByCredentials(req.body.email, req.body.password).then(function(user){
+	console.log("Ando en login")
+  	User.findByCredentials(req.body.email, req.body.password).then(function(user){
     	user.generateToken().then(function(token){
       		return res.send({user, token})
     	}).catch(function(error){
@@ -50,7 +51,7 @@ const logout = function(req, res) {
 const updateUser = function(req, res) {
 	const _id = req.user._id
 	const updates = Object.keys(req.body)
-	const allowedUpdates = ['name', 'password', 'email', 'location']
+	const allowedUpdates = ['name', 'email', 'location']
 	const isValidUpdate = updates.every((update) => allowedUpdates.includes(update))
 
 	if (!isValidUpdate) {
@@ -58,24 +59,10 @@ const updateUser = function(req, res) {
 			error: 'Invalid update, only parameters allowed to update: ' + allowedUpdates
 		})
 	}
-	/*
-	else
-	{
-		console.log(req.body)
-		if(req.body.password!=null){
-					bcrypt.hash(req.body.password, 8).then(function(hash) {
-					req.body.password = hash
-					console.log("esto es el hash: " + hash)
-				})
-			}
-		console.log("encrypted: " + req.body)
-	}
-	*/
 	User.findByIdAndUpdate(_id, req.body).then( function(user) {
 		if(!user) {
 			return res.status(404).send()
 		}
-		user.save()
 		return res.send(user)
 	}).catch(function(error) {
 		res.status(500).send(error)
