@@ -1,6 +1,5 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-
 require('./db/mongoose.js')
 
 const router = require('./routes')

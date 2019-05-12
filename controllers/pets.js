@@ -1,5 +1,6 @@
 const fs = require('fs')
 const Pet = require('../models/pet.js')
+const upload = require('../upload.js')
 
 const getPets = function(req, res) {
 	Pet.find({}).then(function(pets) {
@@ -36,9 +37,11 @@ const getPetPic = function(req, res) {
 }
 
 const createPet = function(req, res) {
-	//const imgPath = req.body.image_path
-	const imgPath = "./petpics/dog1.jpg"
-	console.log(__dirname)
+	var img64Data = req.body.image_path
+	let buff = new Buffer(img64Data, 'base64')
+	console.log("Ando en createPet")
+	
+	fs.writeFileSync('./petpics/out.jpg', buff);
 	const pet = new Pet({
 		name: req.body.name,
 		animalType: req.body.animalType,
@@ -48,16 +51,36 @@ const createPet = function(req, res) {
 		sterilization: req.body.sterilization,
 		adopted: false,
 		createdBy: req.user._id,
-		data: fs.readFileSync(imgPath), //Hay que cambiar esto para que agarre el path especificado por el usuario, o añadirle fotos nosotros o algo así
+		data: fs.readFileSync('./petpics/out.jpg'), //Hay que cambiar esto para que agarre el path especificado por el usuario, o añadirle fotos nosotros o algo así
 		contentType: 'image/png',
 		ownerEmail: req.user.email,
 		location: req.user.location
 	})
+	console.log(pet)
 	pet.save().then(function() {
 		return res.send(pet)
 	}).catch(function(error) {
 		return res.status(400).send({ error : error })
 	})
+
+	/*upload(req, res, (error) => {
+		if(error) {
+			return res.status(400).send({error:error})
+		}
+		else
+		{
+			if(req.file == undefined) {
+				return res.status(400).send({error:error})
+			}
+			else
+			{
+			
+			}
+		}
+	})
+	*/
+
+	
 }
 
 const updatePet = function(req, res) {
