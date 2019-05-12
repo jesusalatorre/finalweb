@@ -105,7 +105,7 @@ const deletePet = function(req, res) {
 		if(!pet) {
 			return res.status(404).send({ error: `Pet with id ${_id} not found.`})
 		}
-		return res.send(todo)
+		return res.send(pet)
 	}).catch(function(error) {
 		res.status(505).send({error:error})
 	})
@@ -120,4 +120,3 @@ module.exports = {
 	updatePet : updatePet,
 	deletePet : deletePet
 }
-
