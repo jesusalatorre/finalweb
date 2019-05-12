@@ -1,6 +1,5 @@
 const fs = require('fs')
 const Pet = require('../models/pet.js')
-const upload = require('../upload.js')
 
 const getPets = function(req, res) {
 	Pet.find({}).then(function(pets) {
@@ -62,25 +61,6 @@ const createPet = function(req, res) {
 	}).catch(function(error) {
 		return res.status(400).send({ error : error })
 	})
-
-	/*upload(req, res, (error) => {
-		if(error) {
-			return res.status(400).send({error:error})
-		}
-		else
-		{
-			if(req.file == undefined) {
-				return res.status(400).send({error:error})
-			}
-			else
-			{
-			
-			}
-		}
-	})
-	*/
-
-	
 }
 
 const updatePet = function(req, res) {
