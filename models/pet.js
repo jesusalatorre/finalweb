@@ -8,7 +8,7 @@ const petSchema = new mongoose.Schema({
 	},
 	animalType: {
 		type: String,
-		required: true, 
+		required: true,
 		validate(value) {
 			if (value == '-1') {
 				throw new Error('Choose an animal type.')

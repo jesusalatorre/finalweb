@@ -1,5 +1,5 @@
 const express = require('express')
-const multer = require('multer');
+const bodyParser = require('body-parser')
 require('./db/mongoose.js')
 
 const router = require('./routes')
@@ -7,6 +7,7 @@ const router = require('./routes')
 const app = express()
 const port = process.env.PORT || 3000
 
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json())
 app.use(router)
 
